@@ -2,6 +2,7 @@ package com.dedsec.bean;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,8 +35,8 @@ public class Product {
 	@Column(name = "txt_img_file_name")
 	private String imageFileName;
 
-	@OneToMany(mappedBy = "product")
-	private List<Associates> listAssociates;
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+	private List<Associates> associateDetails;
 
 	@Transient
 	private String errorCode;
@@ -66,12 +67,13 @@ public class Product {
 		this.imageFileName = imageFileName;
 	}
 
-	public List<Associates> getListAssociates() {
-		return listAssociates;
+	
+	public List<Associates> getAssociateDetails() {
+		return associateDetails;
 	}
 
-	public void setListAssociates(List<Associates> listAssociates) {
-		this.listAssociates = listAssociates;
+	public void setAssociateDetails(List<Associates> associateDetails) {
+		this.associateDetails = associateDetails;
 	}
 
 	public long getProductId() {
@@ -118,7 +120,10 @@ public class Product {
 	public String toString() {
 		return "Product [productId=" + productId + ", productName=" + productName + ", productDesc=" + productDesc
 				+ ", productCode=" + productCode + ", productGroup=" + productGroup + ", imageFileName=" + imageFileName
-				+ ", listAssociates=" + listAssociates + "]";
+				+ ", associateDetails=" + associateDetails + ", errorCode=" + errorCode + ", errorMessage="
+				+ errorMessage + "]";
 	}
+
+
 
 }
