@@ -2,6 +2,7 @@ package com.dedsec.bean;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "dedsec_associates_details")
@@ -27,8 +31,10 @@ public class Associates {
 	@Column(name = "txt_aadhar_number")
 	private String associateAdhaarNo;
 
-	@ManyToOne
-	//@JoinColumn(name = "txt_product_code", nullable = false)
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+
+	@JoinColumn(name = "txt_product_code")
+	@JsonIgnoreProperties("associateDetails")
 	private Product product;
 
 	public String getAssociateName() {

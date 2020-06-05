@@ -5,18 +5,24 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.ForeignKey;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "dedsec_product_details")
 public class Product {
 
-	@Id
 	@GeneratedValue
 	private long productId;
 
@@ -26,7 +32,8 @@ public class Product {
 	@Column(name = "txt_product_desc")
 	private String productDesc;
 
-	@Column(name = "txt_product_code")
+	@Id
+	@Column(name = "txt_product_code", unique = true, nullable = false)
 	private String productCode;
 
 	@Column(name = "txt_product_group")
@@ -35,7 +42,7 @@ public class Product {
 	@Column(name = "txt_img_file_name")
 	private String imageFileName;
 
-	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product", fetch = FetchType.LAZY)
 	private List<Associates> associateDetails;
 
 	@Transient
@@ -67,7 +74,6 @@ public class Product {
 		this.imageFileName = imageFileName;
 	}
 
-	
 	public List<Associates> getAssociateDetails() {
 		return associateDetails;
 	}
@@ -123,7 +129,5 @@ public class Product {
 				+ ", associateDetails=" + associateDetails + ", errorCode=" + errorCode + ", errorMessage="
 				+ errorMessage + "]";
 	}
-
-
 
 }

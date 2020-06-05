@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.dedsec.DedsecApplication;
@@ -31,25 +32,41 @@ public class ProductServices {
 
 		try {
 			// helperDao.productInsertion(product);
-			productRepo.save(product);
+		//	LOGGER.info("-----" + productRepo.findByProductCode(product.getProductCode()));
+			if (productRepo.findByProductCode(product.getProductCode()) != null) {
+				Product tempProduct = productRepo.findByProductCode(product.getProductCode());
+				product.setErrorCode("101");
+				product.setErrorMessage(
+						"Product Code " + product.getProductName() + " already present and Mapped with '"
+								+ tempProduct.getProductName() + "'. Please Provide another product Code.");
+				// Get the mapped product
+
+			} else {
+				productRepo.save(product);
+				// Success
+				product.setErrorCode("0");
+				product.setErrorMessage("SUCCESS");
+			}
+
 		} catch (DataIntegrityViolationException e) {
-			product.setErrorCode("101");
-			product.setErrorMessage("Product Code " + product.getProductCode()
-					+ " already present. Please Provide another product Code.");
+
 		} catch (Exception e) {
 
 			LOGGER.info("-----Exception " + e.getMessage());
-			// e.printStackTrace();
-			product.setErrorCode("0");
+			e.printStackTrace();
+			product.setErrorCode("-1");
 			product.setErrorMessage(e.getMessage());
 
 		}
+
 	}
 
 	public List<Product> getAllProductDetails() {
 		List<Product> product = null;
+		Product prod=null;
 		try {
-			product = productRepo.findAll();
+			//product = productRepo.findAll();
+			prod= productRepo.findByProductCode("1221");
 		} catch (Exception e) {
 			LOGGER.info("-----Exception " + e.getMessage());
 			e.printStackTrace();
@@ -82,9 +99,10 @@ public class ProductServices {
 
 	public Map<String, String> getProductCodeList() {
 		Map<String, String> productCodeList = new HashMap<String, String>();
-		List<Product> prodList = productRepo.findAllOrderByProductCodeDesc();
+		List<Product> prodList = productRepo.findAllByOrderByProductCodeDesc();
 		for (Product prod : prodList) {
-			productCodeList.put(prod.getProductCode(), prod.getProductCode() + "~~" + prod.getProductName());
+			if (prod.getProductCode() != null || prod.getProductCode() != "")
+				productCodeList.put(prod.getProductCode(), prod.getProductCode() + "~~" + prod.getProductName());
 		}
 		return productCodeList;
 	}

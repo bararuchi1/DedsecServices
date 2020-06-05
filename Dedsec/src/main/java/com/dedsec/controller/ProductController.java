@@ -36,16 +36,14 @@ public class ProductController {
 	}
 
 	@PostMapping("/addProduct")
-	public Map<String, String> addProductDetails(@RequestBody Product product) {
+	public Product addProductDetails(@RequestBody Product product) {
 		LOGGER.info("addProduct Product Details :" + product.toString());
+
 		Map<String, String> result = new HashMap<String, String>();
-		/*
-		 * for(Associates as: product.getAssociateDetails() ) { as.setProduct(product);
-		 * }
-		 */
+
 		productServices.prductInsertionService(product);
-		result.put("Success", "101");
-		return result;
+		//result.put("product",product);
+		return product;
 	}
 
 	@GetMapping("/getAllProducts")
@@ -57,11 +55,13 @@ public class ProductController {
 		return productList;
 	}
 
-	@GetMapping("/addAssociate")
-	public Map<String, String> addAssociate() {
+	@PostMapping("/addAssociate")
+	public Map<String, String> addAssociate(@RequestBody Associates associate) {
+		// associate.setProduct(product);
+		LOGGER.info(associate.toString());
 		Map<String, String> returnMessage = null;
-		Associates associates = new Associates();
-		returnMessage = associateServices.addAssociate(associates);
+		// Associates associates = new Associates();
+		returnMessage = associateServices.addAssociate(associate);
 
 		return returnMessage;
 	}
