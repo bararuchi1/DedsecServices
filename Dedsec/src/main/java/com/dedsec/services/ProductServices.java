@@ -1,5 +1,6 @@
 package com.dedsec.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import com.dedsec.DedsecApplication;
 import com.dedsec.DAO.ProductHelper;
+import com.dedsec.JPARepo.AssociateJPARepository;
 import com.dedsec.JPARepo.ProductJPARepository;
 import com.dedsec.JPARepo.UserDetailRepository;
+import com.dedsec.bean.Associates;
 import com.dedsec.bean.Product;
 import com.dedsec.bean.UserDetails;
 
@@ -27,12 +30,15 @@ public class ProductServices {
 	ProductJPARepository productRepo;
 	@Autowired
 	UserDetailRepository userDetailRepo;
+	@Autowired
+	AssociateJPARepository associateJPARepository;
 
 	public void prductInsertionService(Product product) {
 
 		try {
 			// helperDao.productInsertion(product);
-		//	LOGGER.info("-----" + productRepo.findByProductCode(product.getProductCode()));
+			// LOGGER.info("-----" +
+			// productRepo.findByProductCode(product.getProductCode()));
 			if (productRepo.findByProductCode(product.getProductCode()) != null) {
 				Product tempProduct = productRepo.findByProductCode(product.getProductCode());
 				product.setErrorCode("101");
@@ -61,17 +67,29 @@ public class ProductServices {
 
 	}
 
+	/*
+	 * public List<Associates> getAssociateBasedOn() { //List<Associates>
+	 * associateList = new ArrayList<Associates>(); Associates associates =
+	 * associateJPARepository.findSelectedActiveProductAndAssociate("1221",
+	 * "213123123123"); // associateList.add(associate); return associateList; }
+	 */
+
 	public List<Product> getAllProductDetails() {
-		List<Product> product = null;
-		Product prod=null;
+		List<Product> product = new ArrayList<Product>();
+		Product prod = null;
+		Product proddd = null;
 		try {
-			//product = productRepo.findAll();
-			prod= productRepo.findByProductCode("1221");
+			product = productRepo.findAll();
+			// Product produ = new Product();
+			// proddd = productRepo.findSelectedActiveProduct("1221");
+
+			// System.out.println(proddd);
+			// prod= productRepo.findByProductCode("1221");
 		} catch (Exception e) {
 			LOGGER.info("-----Exception " + e.getMessage());
 			e.printStackTrace();
 		}
-
+		product.add(proddd);
 		return product;
 	}
 

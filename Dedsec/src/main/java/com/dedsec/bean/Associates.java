@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,11 +34,66 @@ public class Associates {
 	@Column(name = "txt_aadhar_number")
 	private String associateAdhaarNo;
 
+
+	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 
 	@JoinColumn(name = "txt_product_code")
-	@JsonIgnoreProperties("associateDetails")
+	@JsonIgnoreProperties({ "associateDetails", "hibernateLazyInitializer", "handler" })
 	private Product product;
+
+	@Transient
+	String errorMessage;
+	@Transient
+	String errorCode;
+
+	//Profile Image
+	@Column(name="profileDetails" , length=100000)
+	private byte[] profileDetails;
+	private String profileImageName;
+	private String imageType;
+		
+	
+
+	public String getProfileImageName() {
+		return profileImageName;
+	}
+
+	public void setProfileImageName(String profileImageName) {
+		this.profileImageName = profileImageName;
+	}
+
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imageType) {
+		this.imageType = imageType;
+	}
+
+	public byte[] getProfileDetails() {
+		return profileDetails;
+	}
+
+	public void setProfileDetails(byte[] profileDetails) {
+		this.profileDetails = profileDetails;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+
+	public String getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(String errorCode) {
+		this.errorCode = errorCode;
+	}
 
 	public String getAssociateName() {
 		return associateName;
